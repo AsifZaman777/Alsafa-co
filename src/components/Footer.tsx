@@ -11,7 +11,7 @@ const Footer = () => {
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <img src="/assets/logo.png" alt="ALSAFA Logo" className="h-10 w-10 brightness-0 invert" />
+              <img src="/public/favicon.png" alt="ALSAFA Logo" className="h-10 w-10 contain" />
               <div>
                 <div className="font-bold text-lg">ALSAFA</div>
                 <div className="text-xs opacity-80">Export Import Co.</div>
