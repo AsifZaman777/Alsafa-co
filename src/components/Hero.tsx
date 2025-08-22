@@ -1,5 +1,76 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Ship, Truck, Globe } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+
+// Animated Counter Component
+const AnimatedCounter = ({ 
+  end, 
+  duration = 2000, 
+  suffix = "", 
+  prefix = "" 
+}: { 
+  end: number; 
+  duration?: number; 
+  suffix?: string; 
+  prefix?: string; 
+}) => {
+  const [count, setCount] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const countRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !isVisible) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (countRef.current) {
+      observer.observe(countRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [isVisible]);
+
+  useEffect(() => {
+    if (!isVisible) return;
+
+    let startTime: number;
+    let animationFrame: number;
+
+    const animate = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      
+      // Easing function for smooth animation
+      const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+      const easedProgress = easeOutCubic(progress);
+      
+      setCount(Math.floor(easedProgress * end));
+
+      if (progress < 1) {
+        animationFrame = requestAnimationFrame(animate);
+      }
+    };
+
+    animationFrame = requestAnimationFrame(animate);
+
+    return () => {
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+      }
+    };
+  }, [isVisible, end, duration]);
+
+  return (
+    <div ref={countRef} className="text-2xl font-bold text-primary">
+      {prefix}{count}{suffix}
+    </div>
+  );
+};
 
 const Hero = () => {
   return (
@@ -44,15 +115,15 @@ const Hero = () => {
             {/* Stats */}
             <div className="grid grid-cols-3 gap-4 pt-8 border-t border-border">
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary">50+</div>
+                <AnimatedCounter end={50} suffix="+" duration={2000} />
                 <div className="text-sm text-muted-foreground">Countries</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary">1000+</div>
+                <AnimatedCounter end={1000} suffix="+" duration={2500} />
                 <div className="text-sm text-muted-foreground">Shipments</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary">99%</div>
+                <AnimatedCounter end={99} suffix="%" duration={2200} />
                 <div className="text-sm text-muted-foreground">Success Rate</div>
               </div>
             </div>
