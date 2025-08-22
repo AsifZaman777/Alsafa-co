@@ -1,5 +1,6 @@
 import { Separator } from "@/components/ui/separator";
 import { Globe, Ship, Truck, Mail, Phone, MapPin } from "lucide-react";
+import alsafa from "../../public/favicon.png"
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -11,7 +12,7 @@ const Footer = () => {
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <img src="/public/favicon.png" alt="ALSAFA Logo" className="h-10 w-10 contain" />
+              <img src={alsafa} alt="ALSAFA Logo" className="h-10 w-10 contain" />
               <div>
                 <div className="font-bold text-lg">ALSAFA</div>
                 <div className="text-xs opacity-80">Export Import Co.</div>
